@@ -56,9 +56,13 @@ npm run format
 The project uses Husky for Git hooks and lint-staged for running linters on staged files:
 
 - Pre-commit hook automatically runs ESLint and Prettier on staged files
+- Pre-push hook performs the following checks before pushing:
+  1. Runs linting and formatting checks on files
+  2. Executes unit tests in headless mode
+  3. Builds the application
 - Configuration for lint-staged is in `package.json`
 
-These tools run automatically when you commit changes, ensuring that only properly formatted and lint-free code gets committed.
+These tools run automatically when you commit or push changes, ensuring code quality and preventing issues from reaching the remote repository.
 
 ## Development server
 
