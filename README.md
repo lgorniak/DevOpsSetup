@@ -27,6 +27,39 @@ This project was generated with [Angular CLI](https://github.com/angular/angular
    - CSS for styling
    - No SSR/SSG setup
 
+### Code Quality Tools
+
+The project uses several tools to maintain code quality and consistency:
+
+#### ESLint
+
+ESLint is configured to enforce code quality and catch potential errors. Configuration can be found in `.eslintrc.json`.
+
+To run ESLint manually:
+
+```bash
+npm run lint
+```
+
+#### Prettier
+
+Prettier ensures consistent code formatting across the project. Configuration is in `.prettierrc`.
+
+To format code manually:
+
+```bash
+npm run format
+```
+
+#### Husky and lint-staged
+
+The project uses Husky for Git hooks and lint-staged for running linters on staged files:
+
+- Pre-commit hook automatically runs ESLint and Prettier on staged files
+- Configuration for lint-staged is in `package.json`
+
+These tools run automatically when you commit changes, ensuring that only properly formatted and lint-free code gets committed.
+
 ## Development server
 
 Run `ng serve` for a dev server. Navigate to `http://localhost:4200/`. The application will automatically reload if you change any of the source files.
