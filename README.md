@@ -18,8 +18,6 @@ Code quality enforcement (linting, formatting, type checking)
 Deployment strategies and tooling
 
 Developer productivity (monorepos, scaffolding tools, etc.)
-
-🧪 In Progress
-This is an experimental setup — ideal tools and configurations will be tested, benchmarked, and iteratively improved over time.
-
-📘 Documentation
+  
+  🧪 In Progress
+  This is an experimental setup — ideal tools and configurations will be tested, benchmarked, and iteratively improved over time.
