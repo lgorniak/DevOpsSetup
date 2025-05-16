@@ -5,12 +5,15 @@ This project was generated with [Angular CLI](https://github.com/angular/angular
 ## Development Setup
 
 ### Prerequisites
+
 - Node.js (version ^18.19.1 || ^20.11.1 || >=22.0.0)
 - npm (latest version recommended)
 - Angular CLI v19
 
 ### Installation Steps
+
 1. Install Angular CLI globally:
+
    ```bash
    npm install -g @angular/cli
    ```
