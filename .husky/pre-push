@@ -1,1 +1,1 @@
-npx --no -- lint-staged && ng test --no-watch --no-progress --browsers=ChromeHeadless && ng build 
+npx --no -- lint-staged && npm test && ng build 
