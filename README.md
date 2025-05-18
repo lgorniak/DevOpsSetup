@@ -174,6 +174,20 @@ The project includes multiple security scanning workflows:
 - Detects issues like SQL injection, XSS, etc.
 - Results viewable in GitHub Security tab
 
+#### OWASP ZAP Dynamic Scanning
+
+- Dynamic Application Security Testing (DAST)
+- Scans the running application for security vulnerabilities
+- Runs on pull requests and weekly schedule
+- Tests for:
+  - Cross-Site Scripting (XSS)
+  - SQL Injection
+  - Path Traversal
+  - Security Misconfigurations
+  - And other OWASP Top 10 vulnerabilities
+- Generates detailed HTML and JSON reports
+- Customized rules in `.zap/rules.tsv`
+
 #### Dependency Scanning
 
 - Automatically checks npm dependencies for vulnerabilities

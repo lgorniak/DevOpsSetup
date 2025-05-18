@@ -1,0 +1,8 @@
+10016	IGNORE	(Web Browser XSS Protection Not Enabled)
+10020	IGNORE	(X-Frame-Options Header Not Set)
+10021	IGNORE	(X-Content-Type-Options Header Missing)
+10036	IGNORE	(Server Leaks Information via "X-Powered-By" HTTP Response Header Field(s))
+10038	IGNORE	(Content Security Policy (CSP) Header Not Set)
+10063	IGNORE	(Permissions Policy Header Not Set)
+90022	IGNORE	(Application Error Disclosure)
+90033	IGNORE	(Loosely Scoped Cookie) 
