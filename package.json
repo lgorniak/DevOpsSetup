@@ -10,18 +10,18 @@
     "test": "jest",
     "test:watch": "jest --watch",
     "test:coverage": "jest --coverage",
-    "lint": "eslint \"src/**/*.ts\"",
-    "lint:fix": "eslint \"src/**/*.ts\" --fix",
+    "lint": "eslint \"src/**/*.{ts,html}\"",
+    "lint:fix": "eslint \"src/**/*.{ts,html}\" --fix",
     "format": "prettier --write \"src/**/*.{ts,html,css,scss}\"",
     "prepare": "husky install"
   },
   "private": true,
   "lint-staged": {
-    "src/**/*.ts": [
+    "src/**/*.{ts,html}": [
       "eslint --fix",
       "prettier --write"
     ],
-    "src/**/*.{html,css,scss,json,md}": [
+    "src/**/*.{css,scss,json,md}": [
       "prettier --write"
     ]
   },
@@ -40,6 +40,11 @@
   "devDependencies": {
     "@angular-builders/jest": "^19.0.1",
     "@angular-devkit/build-angular": "^19.2.12",
+    "@angular-eslint/builder": "^19.4.0",
+    "@angular-eslint/eslint-plugin": "^19.4.0",
+    "@angular-eslint/eslint-plugin-template": "^19.4.0",
+    "@angular-eslint/schematics": "^19.4.0",
+    "@angular-eslint/template-parser": "^19.4.0",
     "@angular/cli": "^19.2.12",
     "@angular/compiler-cli": "^19.2.0",
     "@eslint/js": "^9.27.0",
