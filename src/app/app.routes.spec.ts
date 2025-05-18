@@ -1,4 +1,3 @@
-import { Routes } from '@angular/router';
 import { routes } from './app.routes';
 
 describe('App Routes', () => {
