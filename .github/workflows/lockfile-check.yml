@@ -1,0 +1,39 @@
+name: 'Lock File Integrity'
+
+on:
+  pull_request:
+    branches: [main]
+    paths:
+      - 'package.json'
+      - 'package-lock.json'
+
+permissions:
+  contents: read
+
+jobs:
+  verify:
+    name: Verify Lock File
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '22.15.1'
+          cache: 'npm'
+
+      - name: Verify package-lock.json integrity
+        run: |
+          # Check if package-lock.json matches package.json
+          npm install --package-lock-only --dry-run
+
+          # Check for any changes to package-lock.json
+          if git diff --exit-code package-lock.json; then
+            echo "✅ Lock file is valid and up-to-date"
+          else
+            echo "❌ Lock file is out of sync with package.json"
+            echo "Please run 'npm install' locally and commit the updated package-lock.json"
+            exit 1
+          fi

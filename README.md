@@ -163,6 +163,45 @@ Artifacts produced:
 - Test coverage reports
 - Build output
 
+### Security Scanning
+
+The project includes multiple security scanning workflows:
+
+#### CodeQL Analysis
+
+- Static code analysis to identify security vulnerabilities
+- Runs on push to main, pull requests, and weekly
+- Detects issues like SQL injection, XSS, etc.
+- Results viewable in GitHub Security tab
+
+#### OWASP ZAP Dynamic Scanning
+
+- Dynamic Application Security Testing (DAST)
+- Scans the running application for security vulnerabilities
+- Runs on pull requests and weekly schedule
+- Tests for:
+  - Cross-Site Scripting (XSS)
+  - SQL Injection
+  - Path Traversal
+  - Security Misconfigurations
+  - And other OWASP Top 10 vulnerabilities
+- Generates detailed HTML and JSON reports
+- Customized rules in `.zap/rules.tsv`
+
+#### Dependency Scanning
+
+- Automatically checks npm dependencies for vulnerabilities
+- Runs on package.json/package-lock.json changes
+- Weekly scheduled scans to catch newly discovered vulnerabilities
+- Fails the build for critical security issues
+
+#### Secret Scanning
+
+- Uses TruffleHog to detect accidentally committed secrets
+- Scans the repository for API keys, tokens, passwords, etc.
+- Runs on push to main and pull requests
+- Only flags verified secrets to reduce false positives
+
 ### Branch Protection
 
 The main branch is protected with:
