@@ -25,9 +25,11 @@ jobs:
           cache: 'npm'
 
       - name: Verify package-lock.json integrity
+        env:
+          HUSKY: 0
         run: |
           # Check if package-lock.json matches package.json
-          npm install --package-lock-only --dry-run
+          npm install --package-lock-only --dry-run --ignore-scripts
 
           # Check for any changes to package-lock.json
           if git diff --exit-code package-lock.json; then
