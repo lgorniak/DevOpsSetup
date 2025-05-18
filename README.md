@@ -6,7 +6,7 @@ This project was generated with [Angular CLI](https://github.com/angular/angular
 
 ### Prerequisites
 
-- Node.js (version ^18.19.1 || ^20.11.1 || >=22.0.0)
+- Node.js (version 22.15.1)
 - npm (latest version recommended)
 - Angular CLI v19
 
@@ -18,72 +18,172 @@ This project was generated with [Angular CLI](https://github.com/angular/angular
    npm install -g @angular/cli
    ```
 
-2. Project was created with:
+2. Clone and install dependencies:
    ```bash
-   ng new devops-setup --directory . --strict
+   git clone <repository-url>
+   cd devops-setup
+   npm install
    ```
-   - Using strict mode for better type safety
-   - Using standalone components (default in Angular 19)
-   - CSS for styling
-   - No SSR/SSG setup
+
+## Development Workflow
+
+### Development Server
+
+Run `npm start` or `ng serve` for a dev server. Navigate to `http://localhost:4200/`. The application will automatically reload if you change any of the source files.
+
+### Building the Application
+
+Run `npm run build` to build the project. The build artifacts will be stored in the `dist/` directory.
+
+### Testing
+
+The project uses Jest as the primary testing framework, replacing the default Karma/Jasmine setup. Jest provides a more modern and faster testing environment with built-in code coverage reporting.
+
+#### Test Configuration
+
+The Jest setup is defined in `jest.config.js` with the following key features:
+
+- Uses `jest-preset-angular` for Angular-specific configuration
+- Tests are located in the `src/` directory
+- Matches files with `.spec.ts` extension
+- Uses `jsdom` for browser environment simulation
+- Includes path aliases for cleaner imports
+- Configured with coverage reporting
+
+#### Available Test Commands
+
+```bash
+# Run tests
+npm test
+
+# Run tests in watch mode (useful during development)
+npm run test:watch
+
+# Generate coverage report
+npm run test:coverage
+```
+
+#### Writing Tests
+
+Tests in this project follow these conventions:
+
+- Files are named with `.spec.ts` extension
+- Tests are co-located with the code they test
+- Each test file focuses on a single component/service/feature
+- Uses Angular's TestBed for component testing
+- Follows component testing best practices
+
+Coverage reports are generated in multiple formats:
+
+- HTML report (`coverage/html/index.html`) for detailed inspection
+- LCOV report for CI/CD integration
+- Console summary for quick feedback
+
+#### Mocking
+
+Jest provides built-in mocking capabilities for:
+
+- Services and dependencies
+- HTTP requests
+- Time-based operations
+- Component methods
+- Module imports
+
+#### Debugging Tests
+
+To debug tests in VS Code:
+
+1. Add a `debugger` statement in your test
+2. Run the test script with the `--inspect-brk` flag
+3. Attach the VS Code debugger
+
+#### Best Practices
+
+1. Test files should be co-located with the code they test
+2. Use meaningful test descriptions
+3. Follow the Arrange-Act-Assert pattern
+4. Mock external dependencies
+5. Keep tests focused and isolated
+6. Write both positive and negative test cases
+7. Avoid testing implementation details
+8. Maintain test readability
 
 ### Code Quality Tools
 
-The project uses several tools to maintain code quality and consistency:
+#### ESLint and Prettier
 
-#### ESLint
-
-ESLint is configured to enforce code quality and catch potential errors. Configuration can be found in `.eslintrc.json`.
-
-To run ESLint manually:
+Code quality and formatting are enforced using ESLint and Prettier:
 
 ```bash
+# Run linting
 npm run lint
-```
 
-#### Prettier
+# Fix linting issues
+npm run lint:fix
 
-Prettier ensures consistent code formatting across the project. Configuration is in `.prettierrc`.
-
-To format code manually:
-
-```bash
+# Format code
 npm run format
 ```
 
-#### Husky and lint-staged
+Configuration files:
 
-The project uses Husky for Git hooks and lint-staged for running linters on staged files:
+- `.eslintrc.json` - ESLint configuration
+- `.prettierrc` - Prettier configuration
 
-- Pre-commit hook automatically runs ESLint and Prettier on staged files
-- Pre-push hook performs the following checks before pushing:
-  1. Runs linting and formatting checks on files
-  2. Executes unit tests in headless mode
-  3. Builds the application
-- Configuration for lint-staged is in `package.json`
+#### Git Hooks (Husky)
 
-These tools run automatically when you commit or push changes, ensuring code quality and preventing issues from reaching the remote repository.
+Automatic code quality checks are run using Husky:
 
-## Development server
+- Pre-commit: Runs ESLint and Prettier on staged files
+- Pre-push: Runs linting, tests, and build
 
-Run `ng serve` for a dev server. Navigate to `http://localhost:4200/`. The application will automatically reload if you change any of the source files.
+## CI/CD Pipeline
 
-## Code scaffolding
+The project uses GitHub Actions for continuous integration and deployment.
 
-Run `ng generate component component-name` to generate a new component. You can also use `ng generate directive|pipe|service|class|guard|interface|enum|module`.
+### CI Workflow
 
-## Build
+The CI pipeline runs automatically on:
 
-Run `ng build` to build the project. The build artifacts will be stored in the `dist/` directory.
+- Push to main branch
+- Pull requests to main branch
+- Manual trigger
 
-## Running unit tests
+Steps include:
 
-Run `ng test` to execute the unit tests via [Karma](https://karma-runner.github.io).
+1. Code checkout
+2. Node.js 22.15.1 setup
+3. Dependencies installation
+4. Linting
+5. Unit tests with coverage
+6. Build verification
 
-## Running end-to-end tests
+Artifacts produced:
 
-Run `ng e2e` to execute the end-to-end tests via a platform of your choice.
+- Test coverage reports
+- Build output
 
-## Further help
+### Branch Protection
 
-To get more help on the Angular CLI use `ng help` or go check out the [Angular CLI Overview and Command Reference](https://angular.io/cli) page.
+The main branch is protected with:
+
+- Required status checks (CI workflow must pass)
+- Required reviews
+- Up-to-date branch requirement
+
+## Code Scaffolding
+
+Generate new components and other artifacts using Angular CLI:
+
+```bash
+ng generate component my-component
+ng generate service my-service
+ng generate pipe my-pipe
+```
+
+## Further Help
+
+- [Angular CLI Documentation](https://angular.io/cli)
+- [Jest Documentation](https://jestjs.io/)
+- [ESLint Documentation](https://eslint.org/)
+- [Prettier Documentation](https://prettier.io/)
