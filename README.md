@@ -35,11 +35,11 @@ Run `npm start` or `ng serve` for a dev server. Navigate to `http://localhost:42
 
 Run `npm run build` to build the project. The build artifacts will be stored in the `dist/` directory.
 
-### Testing
+## Testing
 
 The project uses Jest as the primary testing framework, replacing the default Karma/Jasmine setup. Jest provides a more modern and faster testing environment with built-in code coverage reporting.
 
-#### Test Configuration
+### Test Configuration
 
 The Jest setup is defined in `jest.config.js` with the following key features:
 
@@ -50,7 +50,7 @@ The Jest setup is defined in `jest.config.js` with the following key features:
 - Includes path aliases for cleaner imports
 - Configured with coverage reporting
 
-#### Available Test Commands
+### Available Test Commands
 
 ```bash
 # Run tests
@@ -63,7 +63,7 @@ npm run test:watch
 npm run test:coverage
 ```
 
-#### Writing Tests
+### Writing Tests
 
 Tests in this project follow these conventions:
 
@@ -79,7 +79,7 @@ Coverage reports are generated in multiple formats:
 - LCOV report for CI/CD integration
 - Console summary for quick feedback
 
-#### Mocking
+### Mocking
 
 Jest provides built-in mocking capabilities for:
 
@@ -97,7 +97,7 @@ To debug tests in VS Code:
 2. Run the test script with the `--inspect-brk` flag
 3. Attach the VS Code debugger
 
-#### Best Practices
+### Best Practices
 
 1. Test files should be co-located with the code they test
 2. Use meaningful test descriptions
@@ -108,9 +108,9 @@ To debug tests in VS Code:
 7. Avoid testing implementation details
 8. Maintain test readability
 
-### Code Quality Tools
+## Code Quality Tools
 
-#### ESLint and Prettier
+### ESLint and Prettier
 
 Code quality and formatting are enforced using ESLint and Prettier:
 
@@ -130,7 +130,7 @@ Configuration files:
 - `.eslintrc.json` - ESLint configuration
 - `.prettierrc` - Prettier configuration
 
-#### Git Hooks (Husky)
+### Git Hooks (Husky)
 
 Automatic code quality checks are run using Husky:
 
@@ -163,18 +163,18 @@ Artifacts produced:
 - Test coverage reports
 - Build output
 
-### Security Scanning
+## Security Scanning
 
 The project includes multiple security scanning workflows:
 
-#### CodeQL Analysis
+### CodeQL Analysis
 
 - Static code analysis to identify security vulnerabilities
 - Runs on push to main, pull requests, and weekly
 - Detects issues like SQL injection, XSS, etc.
 - Results viewable in GitHub Security tab
 
-#### OWASP ZAP Dynamic Scanning
+### OWASP ZAP Dynamic Scanning
 
 - Dynamic Application Security Testing (DAST)
 - Scans the running application for security vulnerabilities
@@ -188,21 +188,21 @@ The project includes multiple security scanning workflows:
 - Generates detailed HTML and JSON reports
 - Customized rules in `.zap/rules.tsv`
 
-#### Dependency Scanning
+### Dependency Scanning
 
 - Automatically checks npm dependencies for vulnerabilities
 - Runs on package.json/package-lock.json changes
 - Weekly scheduled scans to catch newly discovered vulnerabilities
 - Fails the build for critical security issues
 
-#### Secret Scanning
+### Secret Scanning
 
 - Uses TruffleHog to detect accidentally committed secrets
 - Scans the repository for API keys, tokens, passwords, etc.
 - Runs on push to main and pull requests
 - Only flags verified secrets to reduce false positives
 
-### Branch Protection
+## Branch Protection
 
 The main branch is protected with:
 
