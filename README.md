@@ -220,6 +220,47 @@ ng generate service my-service
 ng generate pipe my-pipe
 ```
 
+## Security Features
+
+### Security Headers
+
+The application implements the following security headers to improve protection against common web vulnerabilities:
+
+1. **Content-Security-Policy (CSP)**
+
+   - Restricts which resources can be loaded
+   - Mitigates Cross-Site Scripting (XSS) attacks
+   - Configuration: `default-src 'self'; script-src 'self' 'unsafe-inline' 'unsafe-eval'`
+
+2. **X-Content-Type-Options**
+
+   - Prevents MIME-type sniffing
+   - Value: `nosniff`
+
+3. **X-Frame-Options**
+
+   - Prevents clickjacking attacks by disallowing iframe embedding
+   - Value: `DENY`
+
+4. **Permissions-Policy**
+
+   - Restricts which browser features the application can use
+   - Disabled: geolocation, camera, microphone
+
+5. **Referrer-Policy**
+
+   - Controls information in the Referer header
+   - Value: `strict-origin-when-cross-origin`
+
+6. **Strict-Transport-Security (HSTS)**
+   - Forces HTTPS connections
+   - Configuration: `max-age=31536000; includeSubDomains; preload`
+
+These headers are implemented in multiple ways:
+
+- Client-side meta tags in `index.html`
+- Server configuration in deployment files (`netlify.toml`, `vercel.json`)
+
 ## Further Help
 
 - [Angular CLI Documentation](https://angular.io/cli)
