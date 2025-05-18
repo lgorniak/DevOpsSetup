@@ -34,10 +34,28 @@ jobs:
       - name: Build application
         run: npm run build
 
+      - name: Create headers config
+        run: |
+          mkdir -p .serve-config
+          echo '{
+            "headers": [
+              {
+                "source": "**/*",
+                "headers": [
+                  { "key": "X-Frame-Options", "value": "DENY" },
+                  { "key": "X-Content-Type-Options", "value": "nosniff" },
+                  { "key": "Content-Security-Policy", "value": "default-src '\''self'\''; script-src '\''self'\'' '\''unsafe-inline'\'' '\''unsafe-eval'\''; style-src '\''self'\'' '\''unsafe-inline'\''; img-src '\''self'\'' data:; font-src '\''self'\'' data:; connect-src '\''self'\''" },
+                  { "key": "Permissions-Policy", "value": "geolocation=(), camera=(), microphone=()" },
+                  { "key": "Referrer-Policy", "value": "strict-origin-when-cross-origin" }
+                ]
+              }
+            ]
+          }' > .serve-config/serve.json
+
       - name: Start application
         run: |
           npm install -g serve
-          serve dist/devops-setup -l 3000 &
+          serve -c .serve-config/serve.json dist/devops-setup -l 3000 &
           sleep 10  # Wait for the app to start
 
       - name: ZAP Scan
@@ -46,7 +64,8 @@ jobs:
           target: 'http://localhost:3000'
           rules_file_name: '.zap/rules.tsv'
           cmd_options: '-a'
-          github_token: ${{ secrets.GITHUB_TOKEN }}
+          token: ${{ secrets.GITHUB_TOKEN }}
+          artifact_name: 'zap-results'
 
       - name: Stop application
         if: always()
