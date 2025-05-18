@@ -7,6 +7,12 @@ on:
     - cron: '0 0 * * 1' # Run weekly on Monday
   workflow_dispatch:
 
+permissions:
+  contents: read
+  security-events: write
+  issues: write
+  pull-requests: write
+
 jobs:
   zap_scan:
     name: OWASP ZAP Scan
@@ -40,6 +46,7 @@ jobs:
           target: 'http://localhost:3000'
           rules_file_name: '.zap/rules.tsv'
           cmd_options: '-a'
+          github_token: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Stop application
         if: always()
