@@ -14,7 +14,6 @@
     "lint:fix": "eslint \"src/**/*.{ts,html}\" --fix",
     "format": "prettier --write \"src/**/*.{ts,html,css,scss}\"",
     "prepare": "husky install",
-    "bundlewatch": "bundlewatch",
     "lighthouse": "lighthouse http://localhost:4200 --view --output-path=./lighthouse-report.html --preset=desktop"
   },
   "private": true,

@@ -1,4 +1,4 @@
-name: Lighthouse CI
+Is bundle watch needed by lighthousename: Lighthouse CI
 on:
   pull_request:
     branches: [main]
