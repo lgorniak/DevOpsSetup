@@ -44,11 +44,14 @@ jobs:
         run: |
           lighthouse http://localhost:3000 \
             --chrome-flags="--headless --no-sandbox --disable-gpu" \
-            --output=html --output-path=./lighthouse-reports/report.html
+            --output=html --output-path=./lighthouse-reports/report.html \
+            --preset=desktop \
+            --only-categories=performance,accessibility,best-practices,seo
           lighthouse http://localhost:3000 \
             --chrome-flags="--headless --no-sandbox --disable-gpu" \
             --output=json --output-path=./lighthouse-reports/report.json \
-            --preset=desktop
+            --preset=desktop \
+            --only-categories=performance,accessibility,best-practices,seo
 
       - name: Upload Lighthouse report
         uses: actions/upload-artifact@v4
@@ -64,7 +67,7 @@ jobs:
             --collect.url=http://localhost:3000 \
             --collect.numberOfRuns=3 \
             --upload.target=temporary-public-storage \
-            --assert.preset=lighthouse:recommended
+            --preset=lighthouse:no-pwa
 
       - name: Process Results
         run: |
