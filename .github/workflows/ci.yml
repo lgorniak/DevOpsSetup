@@ -39,12 +39,19 @@ jobs:
           path: coverage/
           retention-days: 14
 
-      - name: Build
-        run: npm run build
+      - name: Build with source maps
+        run: npm run build:stats
+
+      - name: Analyze bundle size
+        run: |
+          npx source-map-explorer dist/devops-setup/browser/**/*.js --html bundle-analysis.html
+          echo "Bundle size analysis completed. Check the artifacts for details."
 
       - name: Upload build artifacts
         uses: actions/upload-artifact@v4
         with:
           name: dist
-          path: dist/
+          path: |
+            dist/
+            bundle-analysis.html
           retention-days: 14

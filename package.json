@@ -5,7 +5,9 @@
   "scripts": {
     "ng": "ng",
     "start": "ng serve",
-    "build": "ng build",
+    "build": "ng build --configuration production",
+    "build:stats": "ng build --configuration production --source-map",
+    "analyze": "source-map-explorer dist/devops-setup/browser/**/*.js",
     "watch": "ng build --watch --configuration development",
     "test": "jest",
     "test:watch": "jest --watch",
@@ -14,7 +16,8 @@
     "lint:fix": "eslint \"src/**/*.{ts,html}\" --fix",
     "format": "prettier --write \"src/**/*.{ts,html,css,scss}\"",
     "prepare": "husky install",
-    "lighthouse": "lighthouse http://localhost:4200 --view --output-path=./lighthouse-report.html --preset=desktop"
+    "lighthouse": "lighthouse http://localhost:4200 --view --output-path=./lighthouse-report.html --preset=desktop",
+    "profile": "ng serve --configuration production --profile"
   },
   "private": true,
   "lint-staged": {
@@ -61,6 +64,7 @@
     "lighthouse": "^12.6.0",
     "lint-staged": "^16.0.0",
     "prettier": "^3.5.3",
+    "source-map-explorer": "^2.5.3",
     "typescript": "~5.7.2"
   }
 }
