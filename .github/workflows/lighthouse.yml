@@ -40,8 +40,10 @@ jobs:
           npm install -g lighthouse
           lighthouse http://localhost:3000 \
             --chrome-flags="--headless --no-sandbox --disable-gpu" \
-            --output html --output-path ./lighthouse-reports/report.html \
-            --output json --output-path ./lighthouse-reports/report.json \
+            --output=html --output-path=./lighthouse-reports/report.html
+          lighthouse http://localhost:3000 \
+            --chrome-flags="--headless --no-sandbox --disable-gpu" \
+            --output=json --output-path=./lighthouse-reports/report.json \
             --preset=desktop
 
       - name: Upload Lighthouse report
