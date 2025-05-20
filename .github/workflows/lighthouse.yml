@@ -10,6 +10,8 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
 
       - name: Setup Node.js
         uses: actions/setup-node@v4
@@ -23,8 +25,11 @@ jobs:
       - name: Build
         run: npm run build
 
-      - name: Install serve
-        run: npm install -g serve
+      - name: Install serve and tools
+        run: |
+          npm install -g serve
+          npm install -g lighthouse
+          npm install -g @lhci/cli@0.13.x
 
       - name: Start server
         run: serve dist/devops-setup/browser -p 3000 &
@@ -35,9 +40,8 @@ jobs:
       - name: Create reports directory
         run: mkdir -p ./lighthouse-reports
 
-      - name: Run Lighthouse
+      - name: Run Lighthouse PR Check
         run: |
-          npm install -g lighthouse
           lighthouse http://localhost:3000 \
             --chrome-flags="--headless --no-sandbox --disable-gpu" \
             --output=html --output-path=./lighthouse-reports/report.html
@@ -54,8 +58,17 @@ jobs:
             ./lighthouse-reports/report.html
             ./lighthouse-reports/report.json
 
-      - name: Lighthouse Check
+      - name: Run Lighthouse CI Comparison
         run: |
+          lhci autorun \
+            --collect.url=http://localhost:3000 \
+            --collect.numberOfRuns=3 \
+            --upload.target=temporary-public-storage \
+            --assert.preset=lighthouse:recommended
+
+      - name: Process Results
+        run: |
+          # Process PR results
           PERFORMANCE_SCORE=$(cat ./lighthouse-reports/report.json | jq '.categories.performance.score')
           ACCESSIBILITY_SCORE=$(cat ./lighthouse-reports/report.json | jq '.categories.accessibility.score')
           BEST_PRACTICES_SCORE=$(cat ./lighthouse-reports/report.json | jq '.categories["best-practices"].score')
@@ -66,6 +79,17 @@ jobs:
           ACCESSIBILITY_PCT=$(echo "$ACCESSIBILITY_SCORE * 100" | bc)
           BEST_PRACTICES_PCT=$(echo "$BEST_PRACTICES_SCORE * 100" | bc)
           SEO_PCT=$(echo "$SEO_SCORE * 100" | bc)
+
+          # Write results to GitHub step summary
+          echo "### Lighthouse Results" >> $GITHUB_STEP_SUMMARY
+          echo "#### Current PR Scores:" >> $GITHUB_STEP_SUMMARY
+          echo "- Performance: $PERFORMANCE_PCT%" >> $GITHUB_STEP_SUMMARY
+          echo "- Accessibility: $ACCESSIBILITY_PCT%" >> $GITHUB_STEP_SUMMARY
+          echo "- Best Practices: $BEST_PRACTICES_PCT%" >> $GITHUB_STEP_SUMMARY
+          echo "- SEO: $SEO_PCT%" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "#### Comparison with main branch:" >> $GITHUB_STEP_SUMMARY
+          echo "Full comparison report available at: $(cat .lighthouseci/links.json | jq -r '.links[0]')" >> $GITHUB_STEP_SUMMARY
 
           # Check thresholds
           if (( $(echo "$PERFORMANCE_PCT < 90" | bc -l) )); then
@@ -86,7 +110,3 @@ jobs:
           fi
 
           echo "All Lighthouse scores pass thresholds!"
-          echo "Performance: $PERFORMANCE_PCT%"
-          echo "Accessibility: $ACCESSIBILITY_PCT%"
-          echo "Best Practices: $BEST_PRACTICES_PCT%"
-          echo "SEO: $SEO_PCT%"
