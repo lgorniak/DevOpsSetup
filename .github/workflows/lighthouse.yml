@@ -1,4 +1,4 @@
-Is bundle watch needed by lighthousename: Lighthouse CI
+name: Lighthouse CI
 on:
   pull_request:
     branches: [main]
@@ -32,13 +32,18 @@ jobs:
       - name: Wait for server
         run: sleep 10
 
+      - name: Create reports directory
+        run: mkdir -p ./lighthouse-reports
+
       - name: Run Lighthouse
         run: |
           npm install -g lighthouse
           lighthouse http://localhost:3000 \
             --chrome-flags="--headless --no-sandbox --disable-gpu" \
-            --output html --output-path ./lighthouse-report.html \
-            --output json --output-path ./lighthouse-report.json \
+            --output=html --output-path=./lighthouse-reports/report.html
+          lighthouse http://localhost:3000 \
+            --chrome-flags="--headless --no-sandbox --disable-gpu" \
+            --output=json --output-path=./lighthouse-reports/report.json \
             --preset=desktop
 
       - name: Upload Lighthouse report
@@ -46,15 +51,15 @@ jobs:
         with:
           name: lighthouse-report
           path: |
-            ./lighthouse-report.html
-            ./lighthouse-report.json
+            ./lighthouse-reports/report.html
+            ./lighthouse-reports/report.json
 
       - name: Lighthouse Check
         run: |
-          PERFORMANCE_SCORE=$(cat ./lighthouse-report.json | jq '.categories.performance.score')
-          ACCESSIBILITY_SCORE=$(cat ./lighthouse-report.json | jq '.categories.accessibility.score')
-          BEST_PRACTICES_SCORE=$(cat ./lighthouse-report.json | jq '.categories["best-practices"].score')
-          SEO_SCORE=$(cat ./lighthouse-report.json | jq '.categories.seo.score')
+          PERFORMANCE_SCORE=$(cat ./lighthouse-reports/report.json | jq '.categories.performance.score')
+          ACCESSIBILITY_SCORE=$(cat ./lighthouse-reports/report.json | jq '.categories.accessibility.score')
+          BEST_PRACTICES_SCORE=$(cat ./lighthouse-reports/report.json | jq '.categories["best-practices"].score')
+          SEO_SCORE=$(cat ./lighthouse-reports/report.json | jq '.categories.seo.score')
 
           # Convert scores to percentages
           PERFORMANCE_PCT=$(echo "$PERFORMANCE_SCORE * 100" | bc)
