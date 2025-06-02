@@ -35,9 +35,9 @@ jobs:
       - name: Upload test coverage
         uses: actions/upload-artifact@v4
         with:
-          name: coverage
+          name: coverage-${{ github.sha }}
           path: coverage/
-          retention-days: 14
+          retention-days: 7
 
       - name: Build
         run: npm run build
@@ -45,6 +45,6 @@ jobs:
       - name: Upload build artifacts
         uses: actions/upload-artifact@v4
         with:
-          name: dist
+          name: build-${{ github.sha }}
           path: dist/
-          retention-days: 14
+          retention-days: 1
