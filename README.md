@@ -1,6 +1,6 @@
 # DevOps Setup with Angular
 
-This project was generated with [Angular CLI](https://github.com/angular/angular-cli) version 19.
+This project was generated with [Angular CLI](https://github.com/angular/angular-cli) v19.
 
 ## Development Setup
 
