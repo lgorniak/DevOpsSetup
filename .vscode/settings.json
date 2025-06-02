@@ -1,3 +1,12 @@
 {
-  "cSpell.words": ["bazel", "lgorniak", "libpeerconnection", "scannerwork", "sonarcloud", "testem"]
+  "cSpell.words": [
+    "bazel",
+    "Contentful",
+    "lgorniak",
+    "libpeerconnection",
+    "scannerwork",
+    "sonarcloud",
+    "testem",
+    "trufflesecurity"
+  ]
 }

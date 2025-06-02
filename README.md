@@ -220,6 +220,75 @@ ng generate service my-service
 ng generate pipe my-pipe
 ```
 
+## Performance Monitoring
+
+The project includes comprehensive performance monitoring tools and checks to ensure optimal application performance.
+
+### Lighthouse CI
+
+Automated performance, accessibility, SEO, and best practices auditing using Lighthouse:
+
+- Runs on every pull request and push to main
+- Checks performance metrics:
+  - First Contentful Paint
+  - Time to Interactive
+  - Speed Index
+  - Total Blocking Time
+  - Largest Contentful Paint
+  - Cumulative Layout Shift
+- Enforces minimum scores:
+  - Performance: 90%
+  - Accessibility: 90%
+  - Best Practices: 90%
+  - SEO: 90%
+- Generates HTML and JSON reports
+- Available as GitHub Actions artifacts
+
+Run locally:
+
+```bash
+# Start development server
+npm start
+
+# Run Lighthouse audit
+npm run lighthouse
+```
+
+### Bundle Size Monitoring
+
+Bundlewatch tracks bundle sizes and enforces size limits:
+
+- Monitors main bundle, polyfills, and styles
+- Compares sizes between builds
+- Enforces size limits:
+  - Main bundle: 400KB
+  - Polyfills: 100KB
+  - Styles: 10KB
+
+Run locally:
+
+```bash
+npm run bundlewatch
+```
+
+### Angular CLI Budgets
+
+Build-time bundle size monitoring:
+
+- Configured in angular.json
+- Warns at 500KB total initial bundle size
+- Errors at 1MB total initial bundle size
+- Component-specific style size limits:
+  - Warning: 3KB
+  - Error: 4KB
+
+These tools work together to ensure:
+
+- Fast initial load times
+- Optimal bundle sizes
+- High-quality user experience
+- Adherence to web best practices
+
 ## Further Help
 
 - [Angular CLI Documentation](https://angular.io/cli)
