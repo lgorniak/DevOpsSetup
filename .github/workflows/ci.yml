@@ -1,17 +1,24 @@
-name: 'Build and Test'
+name: 'CI Pipeline'
 
 on:
   pull_request:
+    branches: [main]
+  push:
     branches: [main]
   workflow_dispatch:
 
 permissions:
   contents: read
+  security-events: write
+  issues: write
+  pull-requests: write
 
 jobs:
   build-and-test:
     name: Build and Test
     runs-on: ubuntu-latest
+    outputs:
+      cache-hit: ${{ steps.cache.outputs.cache-hit }}
 
     steps:
       - name: Checkout repository
@@ -47,4 +54,157 @@ jobs:
         with:
           name: dist
           path: dist/
-          retention-days: 14
+          retention-days: 1
+
+  lighthouse:
+    name: Lighthouse Performance
+    runs-on: ubuntu-latest
+    needs: build-and-test
+    if: github.event_name == 'pull_request' || github.event_name == 'push'
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Download build artifacts
+        uses: actions/download-artifact@v4
+        with:
+          name: dist
+          path: dist/
+
+      - name: Install serve
+        run: npm install -g serve
+
+      - name: Start server
+        run: serve dist/devops-setup/browser -p 3000 &
+
+      - name: Wait for server
+        run: sleep 10
+
+      - name: Create reports directory
+        run: mkdir -p ./lighthouse-reports
+
+      - name: Run Lighthouse
+        run: |
+          npm install -g lighthouse
+          lighthouse http://localhost:3000 \
+            --chrome-flags="--headless --no-sandbox --disable-gpu" \
+            --skip-audits=seo \
+            --output=json --output-path=./lighthouse-reports/report.json \
+            --preset=desktop
+
+      - name: Upload Lighthouse report
+        uses: actions/upload-artifact@v4
+        with:
+          name: lighthouse-report
+          path: ./lighthouse-reports/report.json
+
+      - name: Lighthouse Check
+        run: |
+          PERFORMANCE_SCORE=$(cat ./lighthouse-reports/report.json | jq '.categories.performance.score')
+          ACCESSIBILITY_SCORE=$(cat ./lighthouse-reports/report.json | jq '.categories.accessibility.score')
+          BEST_PRACTICES_SCORE=$(cat ./lighthouse-reports/report.json | jq '.categories["best-practices"].score')
+
+          # Convert scores to percentages
+          PERFORMANCE_PCT=$(echo "$PERFORMANCE_SCORE * 100" | bc)
+          ACCESSIBILITY_PCT=$(echo "$ACCESSIBILITY_SCORE * 100" | bc)
+          BEST_PRACTICES_PCT=$(echo "$BEST_PRACTICES_SCORE * 100" | bc)
+
+          # Check thresholds
+          if (( $(echo "$PERFORMANCE_PCT < 90" | bc -l) )); then
+            echo "Performance score too low: $PERFORMANCE_PCT"
+            exit 1
+          fi
+          if (( $(echo "$ACCESSIBILITY_PCT < 90" | bc -l) )); then
+            echo "Accessibility score too low: $ACCESSIBILITY_PCT"
+            exit 1
+          fi
+          if (( $(echo "$BEST_PRACTICES_PCT < 90" | bc -l) )); then
+            echo "Best Practices score too low: $BEST_PRACTICES_PCT"
+            exit 1
+          fi
+
+          echo "All Lighthouse scores pass thresholds!"
+          echo "Performance: $PERFORMANCE_PCT%"
+          echo "Accessibility: $ACCESSIBILITY_PCT%"
+          echo "Best Practices: $BEST_PRACTICES_PCT%"
+
+  zap-scan:
+    name: OWASP ZAP Security Scan
+    runs-on: ubuntu-latest
+    needs: build-and-test
+    if: github.event_name == 'pull_request'
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Download build artifacts
+        uses: actions/download-artifact@v4
+        with:
+          name: dist
+          path: dist/
+
+      - name: Start application
+        run: |
+          npm install -g serve
+          serve dist/devops-setup -l 3000 &
+          sleep 10  # Wait for the app to start
+
+      - name: ZAP Scan
+        uses: zaproxy/action-baseline@v0.11.0
+        with:
+          target: 'http://localhost:3000'
+          rules_file_name: '.zap/rules.tsv'
+          cmd_options: '-a'
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Stop application
+        if: always()
+        run: |
+          pkill -f "serve dist/devops-setup"
+          sleep 5
+
+      - name: Upload ZAP Report
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: zap-scan-report
+          path: |
+            zap-baseline.html
+            zap-baseline.json
+          retention-days: 7
+
+  dependency-review:
+    name: Dependency Review
+    runs-on: ubuntu-latest
+    if: github.event_name == 'pull_request'
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Dependency Review
+        uses: actions/dependency-review-action@v4
+        with:
+          fail-on-severity: high
+          vulnerability-check: true
+
+  secret-scanning:
+    name: Secret Scanning
+    runs-on: ubuntu-latest
+    if: github.event_name == 'pull_request'
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0 # Fetch all history for all branches and tags
+
+      - name: TruffleHog OSS
+        uses: trufflesecurity/trufflehog@v3.42.0
+        with:
+          path: ./
+          base: ${{ github.event.repository.default_branch }}
+          head: HEAD
+          extra_args: --debug --only-verified
