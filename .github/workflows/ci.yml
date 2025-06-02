@@ -117,6 +117,10 @@ jobs:
           path: ./lighthouse-reports/report.json
 
       - name: Lighthouse Check
+        env:
+          PERFORMANCE_THRESHOLD: 85
+          ACCESSIBILITY_THRESHOLD: 90
+          BEST_PRACTICES_THRESHOLD: 90
         run: |
           PERFORMANCE_SCORE=$(cat ./lighthouse-reports/report.json | jq '.categories.performance.score')
           ACCESSIBILITY_SCORE=$(cat ./lighthouse-reports/report.json | jq '.categories.accessibility.score')
@@ -127,24 +131,48 @@ jobs:
           ACCESSIBILITY_PCT=$(echo "$ACCESSIBILITY_SCORE * 100" | bc)
           BEST_PRACTICES_PCT=$(echo "$BEST_PRACTICES_SCORE * 100" | bc)
 
-          # Check thresholds
-          if (( $(echo "$PERFORMANCE_PCT < 90" | bc -l) )); then
-            echo "Performance score too low: $PERFORMANCE_PCT"
-            exit 1
-          fi
-          if (( $(echo "$ACCESSIBILITY_PCT < 90" | bc -l) )); then
-            echo "Accessibility score too low: $ACCESSIBILITY_PCT"
-            exit 1
-          fi
-          if (( $(echo "$BEST_PRACTICES_PCT < 90" | bc -l) )); then
-            echo "Best Practices score too low: $BEST_PRACTICES_PCT"
-            exit 1
-          fi
-
-          echo "All Lighthouse scores pass thresholds!"
+          echo "Lighthouse Scores:"
           echo "Performance: $PERFORMANCE_PCT%"
           echo "Accessibility: $ACCESSIBILITY_PCT%"
           echo "Best Practices: $BEST_PRACTICES_PCT%"
+          echo ""
+          echo "Thresholds:"
+          echo "Performance: ${PERFORMANCE_THRESHOLD}%"
+          echo "Accessibility: ${ACCESSIBILITY_THRESHOLD}%"
+          echo "Best Practices: ${BEST_PRACTICES_THRESHOLD}%"
+          echo ""
+
+          # Check thresholds
+          FAILED=false
+          if (( $(echo "$PERFORMANCE_PCT < $PERFORMANCE_THRESHOLD" | bc -l) )); then
+            echo "❌ Performance score too low: $PERFORMANCE_PCT% < ${PERFORMANCE_THRESHOLD}%"
+            FAILED=true
+          else
+            echo "✅ Performance score passes: $PERFORMANCE_PCT% >= ${PERFORMANCE_THRESHOLD}%"
+          fi
+
+          if (( $(echo "$ACCESSIBILITY_PCT < $ACCESSIBILITY_THRESHOLD" | bc -l) )); then
+            echo "❌ Accessibility score too low: $ACCESSIBILITY_PCT% < ${ACCESSIBILITY_THRESHOLD}%"
+            FAILED=true
+          else
+            echo "✅ Accessibility score passes: $ACCESSIBILITY_PCT% >= ${ACCESSIBILITY_THRESHOLD}%"
+          fi
+
+          if (( $(echo "$BEST_PRACTICES_PCT < $BEST_PRACTICES_THRESHOLD" | bc -l) )); then
+            echo "❌ Best Practices score too low: $BEST_PRACTICES_PCT% < ${BEST_PRACTICES_THRESHOLD}%"
+            FAILED=true
+          else
+            echo "✅ Best Practices score passes: $BEST_PRACTICES_PCT% >= ${BEST_PRACTICES_THRESHOLD}%"
+          fi
+
+          if [ "$FAILED" = true ]; then
+            echo ""
+            echo "❌ Lighthouse checks failed! Please improve the failing scores."
+            exit 1
+          else
+            echo ""
+            echo "✅ All Lighthouse scores pass thresholds!"
+          fi
 
   zap-scan:
     name: OWASP ZAP Security Scan
