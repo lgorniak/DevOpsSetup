@@ -211,7 +211,7 @@ jobs:
           rules_file_name: '.zap/rules.tsv'
           cmd_options: '-a'
           token: ${{ secrets.GITHUB_TOKEN }}
-          artifact_name: 'zap-scan-results'
+          artifact_name: 'zapscanresults'
 
       - name: Stop application server
         if: always()
