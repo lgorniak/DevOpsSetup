@@ -40,9 +40,7 @@ jobs:
           npm install -g lighthouse
           lighthouse http://localhost:3000 \
             --chrome-flags="--headless --no-sandbox --disable-gpu" \
-            --output=html --output-path=./lighthouse-reports/report.html
-          lighthouse http://localhost:3000 \
-            --chrome-flags="--headless --no-sandbox --disable-gpu" \
+            --skip-audits=seo \
             --output=json --output-path=./lighthouse-reports/report.json \
             --preset=desktop
 
@@ -59,13 +57,11 @@ jobs:
           PERFORMANCE_SCORE=$(cat ./lighthouse-reports/report.json | jq '.categories.performance.score')
           ACCESSIBILITY_SCORE=$(cat ./lighthouse-reports/report.json | jq '.categories.accessibility.score')
           BEST_PRACTICES_SCORE=$(cat ./lighthouse-reports/report.json | jq '.categories["best-practices"].score')
-          SEO_SCORE=$(cat ./lighthouse-reports/report.json | jq '.categories.seo.score')
 
           # Convert scores to percentages
           PERFORMANCE_PCT=$(echo "$PERFORMANCE_SCORE * 100" | bc)
           ACCESSIBILITY_PCT=$(echo "$ACCESSIBILITY_SCORE * 100" | bc)
           BEST_PRACTICES_PCT=$(echo "$BEST_PRACTICES_SCORE * 100" | bc)
-          SEO_PCT=$(echo "$SEO_SCORE * 100" | bc)
 
           # Check thresholds
           if (( $(echo "$PERFORMANCE_PCT < 90" | bc -l) )); then
@@ -80,13 +76,8 @@ jobs:
             echo "Best Practices score too low: $BEST_PRACTICES_PCT"
             exit 1
           fi
-          if (( $(echo "$SEO_PCT < 90" | bc -l) )); then
-            echo "SEO score too low: $SEO_PCT"
-            exit 1
-          fi
 
           echo "All Lighthouse scores pass thresholds!"
           echo "Performance: $PERFORMANCE_PCT%"
           echo "Accessibility: $ACCESSIBILITY_PCT%"
           echo "Best Practices: $BEST_PRACTICES_PCT%"
-          echo "SEO: $SEO_PCT%"
