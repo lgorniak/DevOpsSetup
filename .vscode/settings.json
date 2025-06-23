@@ -1,12 +1,15 @@
 {
   "cSpell.words": [
     "bazel",
+    "Bundlewatch",
     "Contentful",
     "lgorniak",
     "libpeerconnection",
+    "pkill",
     "scannerwork",
     "sonarcloud",
     "testem",
-    "trufflesecurity"
+    "trufflesecurity",
+    "zaproxy"
   ]
 }
