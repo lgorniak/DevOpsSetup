@@ -213,7 +213,7 @@ jobs:
           token: ${{ secrets.GITHUB_TOKEN }}
           fail_action: false
           allow_issue_writing: false
-          artifact_name: 'zap-scan-results'
+          artifact_name: 'zapScanResults'
 
       - name: Stop application server
         if: always()
