@@ -1,297 +1,153 @@
-# DevOps Setup with Angular
+# DevOps-Ready Angular Application
 
-This project was generated with [Angular CLI](https://github.com/angular/angular-cli) v19.
+This repository contains an Angular 19 application configured with a comprehensive DevOps toolchain for robust testing, security, and performance monitoring.
 
-## Development Setup
+## 📋 Table of Contents
+
+- [🚀 Getting Started](#-getting-started)
+- [🛠️ Common Commands](#️-common-commands)
+- [✅ Automated Quality Gates](#-automated-quality-gates)
+- [🛡️ Security Pipeline](#️-security-pipeline)
+- [⚡ Performance Monitoring](#-performance-monitoring)
+- [🔄 CI/CD Workflow](#-cicd-workflow)
+- [🌿 Branching & Contributions](#-branching--contributions)
+
+## 🚀 Getting Started
 
 ### Prerequisites
 
-- Node.js (version 22.15.1)
-- npm (latest version recommended)
-- Angular CLI v19
+- **Node.js**: v22.15.1
+- **npm**: latest version recommended
+- **Angular CLI**: v19 (will be installed locally)
 
-### Installation Steps
+### Installation
 
-1. Install Angular CLI globally:
+1. **Clone the Repository**
 
-   ```bash
-   npm install -g @angular/cli
-   ```
-
-2. Clone and install dependencies:
    ```bash
    git clone <repository-url>
    cd devops-setup
+   ```
+
+2. **Install Dependencies**
+
+   This command installs all the necessary npm packages, including a local version of the Angular CLI.
+
+   ```bash
    npm install
    ```
 
-## Development Workflow
+3. **Run the Development Server**
 
-### Development Server
+   ```bash
+   npm start
+   ```
 
-Run `npm start` or `ng serve` for a dev server. Navigate to `http://localhost:4200/`. The application will automatically reload if you change any of the source files.
+   Navigate to http://localhost:4200/. The app will automatically reload on file changes.
 
-### Building the Application
+## 🛠️ Common Commands
 
-Run `npm run build` to build the project. The build artifacts will be stored in the `dist/` directory.
+All primary development and quality-assurance tasks can be run using the following npm scripts.
 
-## Testing
+| Command                 | Description                                           | Tool(s)     |
+| ----------------------- | ----------------------------------------------------- | ----------- |
+| `npm start`             | Starts the local development server with live reload. | Angular CLI |
+| `npm run build`         | Builds the application for production.                | Angular CLI |
+| `npm test`              | Runs all unit tests once.                             | Jest        |
+| `npm run test:watch`    | Runs unit tests in interactive watch mode.            | Jest        |
+| `npm run test:coverage` | Runs unit tests and generates a coverage report.      | Jest        |
+| `npm run lint`          | Lints the codebase for style and quality issues.      | ESLint      |
+| `npm run lint:fix`      | Automatically fixes all fixable linting issues.       | ESLint      |
+| `npm run format`        | Formats all code according to project style.          | Prettier    |
+| `npm run lighthouse`    | Runs a Lighthouse performance audit locally.          | Lighthouse  |
+| `npm run bundlewatch`   | Checks production bundle sizes against limits.        | Bundlewatch |
 
-The project uses Jest as the primary testing framework, replacing the default Karma/Jasmine setup. Jest provides a more modern and faster testing environment with built-in code coverage reporting.
+## ✅ Automated Quality Gates
 
-### Test Configuration
+This project enforces high code quality standards through a series of automated checks.
 
-The Jest setup is defined in `jest.config.js` with the following key features:
+### Code Formatting & Linting (ESLint + Prettier)
 
-- Uses `jest-preset-angular` for Angular-specific configuration
-- Tests are located in the `src/` directory
-- Matches files with `.spec.ts` extension
-- Uses `jsdom` for browser environment simulation
-- Includes path aliases for cleaner imports
-- Configured with coverage reporting
+We use ESLint for identifying problematic patterns in code and Prettier for enforcing a consistent code style. These are configured to work together to ensure all code is readable and maintainable.
 
-### Available Test Commands
+- **Configuration**: `.eslintrc.json`, `.prettierrc`
+- **Automation**: A pre-commit hook via Husky automatically lints and formats staged files.
 
-```bash
-# Run tests
-npm test
+### Unit & Integration Testing (Jest)
 
-# Run tests in watch mode (useful during development)
-npm run test:watch
+The project uses Jest for fast, modern, and reliable testing.
 
-# Generate coverage report
-npm run test:coverage
-```
+- **Framework**: `jest-preset-angular` adapts Jest for the Angular ecosystem.
+- **Location**: Tests (`.spec.ts` files) are co-located with the source code they test.
+- **Coverage**: Reports are automatically generated in `coverage/` and uploaded to SonarCloud.
 
-### Writing Tests
+### Static Code Analysis (SonarCloud)
 
-Tests in this project follow these conventions:
+We use SonarCloud for continuous inspection of code quality and security.
 
-- Files are named with `.spec.ts` extension
-- Tests are co-located with the code they test
-- Each test file focuses on a single component/service/feature
-- Uses Angular's TestBed for component testing
-- Follows component testing best practices
+- **Triggers**: Runs on every push and pull request to the main branch.
+- **Metrics Tracked**: Code Smells, Security Vulnerabilities, Code Coverage, Duplication, and Technical Debt.
+- **Configuration**: `sonar-project.properties`
 
-Coverage reports are generated in multiple formats:
+## 🛡️ Security Pipeline
 
-- HTML report (`coverage/html/index.html`) for detailed inspection
-- LCOV report for CI/CD integration
-- Console summary for quick feedback
+Multiple layers of automated security scanning are integrated into the CI/CD pipeline to identify and mitigate vulnerabilities early.
 
-### Mocking
+- **Static Analysis (CodeQL)**: GitHub's semantic code analysis engine scans for security vulnerabilities like XSS and SQL Injection on every push and pull request. Results appear in the GitHub Security tab.
 
-Jest provides built-in mocking capabilities for:
+- **Dynamic Analysis (OWASP ZAP)**: Scans the running application for a wide range of vulnerabilities based on the OWASP Top 10. Generates detailed reports on pull requests.
 
-- Services and dependencies
-- HTTP requests
-- Time-based operations
-- Component methods
-- Module imports
+- **Dependency Scanning**: Automatically detects known vulnerabilities in npm dependencies. Runs on dependency changes and on a weekly schedule.
 
-#### Debugging Tests
+- **Secret Scanning (TruffleHog)**: Scans repository history for accidentally committed secrets like API keys and passwords on every push.
 
-To debug tests in VS Code:
+## ⚡ Performance Monitoring
 
-1. Add a `debugger` statement in your test
-2. Run the test script with the `--inspect-brk` flag
-3. Attach the VS Code debugger
-
-### Best Practices
-
-1. Test files should be co-located with the code they test
-2. Use meaningful test descriptions
-3. Follow the Arrange-Act-Assert pattern
-4. Mock external dependencies
-5. Keep tests focused and isolated
-6. Write both positive and negative test cases
-7. Avoid testing implementation details
-8. Maintain test readability
-
-## Code Quality Tools
-
-### ESLint and Prettier
-
-Code quality and formatting are enforced using ESLint and Prettier:
-
-```bash
-# Run linting
-npm run lint
-
-# Fix linting issues
-npm run lint:fix
-
-# Format code
-npm run format
-```
-
-Configuration files:
-
-- `.eslintrc.json` - ESLint configuration
-- `.prettierrc` - Prettier configuration
-
-### Git Hooks (Husky)
-
-Automatic code quality checks are run using Husky:
-
-- Pre-commit: Runs ESLint and Prettier on staged files
-- Pre-push: Runs linting, tests, and build
-
-## CI/CD Pipeline
-
-The project uses GitHub Actions for continuous integration and deployment.
-
-### CI Workflow
-
-The CI pipeline runs automatically on:
-
-- Push to main branch
-- Pull requests to main branch
-- Manual trigger
-
-Steps include:
-
-1. Code checkout
-2. Node.js 22.15.1 setup
-3. Dependencies installation
-4. Linting
-5. Unit tests with coverage
-6. Build verification
-
-Artifacts produced:
-
-- Test coverage reports
-- Build output
-
-## Security Scanning
-
-The project includes multiple security scanning workflows:
-
-### CodeQL Analysis
-
-- Static code analysis to identify security vulnerabilities
-- Runs on push to main, pull requests, and weekly
-- Detects issues like SQL injection, XSS, etc.
-- Results viewable in GitHub Security tab
-
-### OWASP ZAP Dynamic Scanning
-
-- Dynamic Application Security Testing (DAST)
-- Scans the running application for security vulnerabilities
-- Runs on pull requests and weekly schedule
-- Tests for:
-  - Cross-Site Scripting (XSS)
-  - SQL Injection
-  - Path Traversal
-  - Security Misconfigurations
-  - And other OWASP Top 10 vulnerabilities
-- Generates detailed HTML and JSON reports
-- Customized rules in `.zap/rules.tsv`
-
-### Dependency Scanning
-
-- Automatically checks npm dependencies for vulnerabilities
-- Runs on package.json/package-lock.json changes
-- Weekly scheduled scans to catch newly discovered vulnerabilities
-- Fails the build for critical security issues
-
-### Secret Scanning
-
-- Uses TruffleHog to detect accidentally committed secrets
-- Scans the repository for API keys, tokens, passwords, etc.
-- Runs on push to main and pull requests
-- Only flags verified secrets to reduce false positives
-
-## Branch Protection
-
-The main branch is protected with:
-
-- Required status checks (CI workflow must pass)
-- Required reviews
-- Up-to-date branch requirement
-
-## Code Scaffolding
-
-Generate new components and other artifacts using Angular CLI:
-
-```bash
-ng generate component my-component
-ng generate service my-service
-ng generate pipe my-pipe
-```
-
-## Performance Monitoring
-
-The project includes comprehensive performance monitoring tools and checks to ensure optimal application performance.
+Application performance is continuously monitored to ensure a fast and high-quality user experience.
 
 ### Lighthouse CI
 
-Automated performance, accessibility, SEO, and best practices auditing using Lighthouse:
-
-- Runs on every pull request and push to main
-- Checks performance metrics:
-  - First Contentful Paint
-  - Time to Interactive
-  - Speed Index
-  - Total Blocking Time
-  - Largest Contentful Paint
-  - Cumulative Layout Shift
-- Enforces minimum scores:
-  - Performance: 90%
-  - Accessibility: 90%
-  - Best Practices: 90%
-  - SEO: 90%
-- Generates HTML and JSON reports
-- Available as GitHub Actions artifacts
-
-Run locally:
-
-```bash
-# Start development server
-npm start
-
-# Run Lighthouse audit
-npm run lighthouse
-```
+Automatically audits every pull request for Performance, Accessibility, Best Practices, and SEO, enforcing minimum scores of 90% across all categories.
 
 ### Bundle Size Monitoring
 
-Bundlewatch tracks bundle sizes and enforces size limits:
+- **Bundlewatch**: Tracks bundle sizes on every build and fails if they exceed predefined limits.
+- **Angular CLI Budgets**: Configured in `angular.json` to provide build-time warnings and errors if bundle sizes exceed their thresholds.
 
-- Monitors main bundle, polyfills, and styles
-- Compares sizes between builds
-- Enforces size limits:
-  - Main bundle: 400KB
-  - Polyfills: 100KB
-  - Styles: 10KB
+## 🔄 CI/CD Workflow
 
-Run locally:
+The project uses GitHub Actions for its Continuous Integration pipeline.
+
+- **Workflow File**: `.github/workflows/ci.yml`
+- **Triggers**: Runs on pushes & pull requests to main, or can be triggered manually.
+
+### Key Steps:
+
+1. Checkout code
+2. Set up Node.js v22.15.1
+3. Install dependencies
+4. Run Linting & Formatting checks
+5. Execute Unit Tests & collect coverage
+6. Run Production Build
+
+## 🌿 Branching & Contributions
+
+### Branch Protection
+
+The main branch is protected with rules that require:
+
+- All CI status checks to pass before merging.
+- At least one peer review.
+- Branches to be up-to-date before merging.
+
+### Code Scaffolding
+
+Use the Angular CLI to generate new components, services, and other artifacts.
 
 ```bash
-npm run bundlewatch
+# Generate a new component
+ng generate component my-component
+
+# Generate a new service
+ng generate service my-service
 ```
-
-### Angular CLI Budgets
-
-Build-time bundle size monitoring:
-
-- Configured in angular.json
-- Warns at 500KB total initial bundle size
-- Errors at 1MB total initial bundle size
-- Component-specific style size limits:
-  - Warning: 3KB
-  - Error: 4KB
-
-These tools work together to ensure:
-
-- Fast initial load times
-- Optimal bundle sizes
-- High-quality user experience
-- Adherence to web best practices
-
-## Further Help
-
-- [Angular CLI Documentation](https://angular.io/cli)
-- [Jest Documentation](https://jestjs.io/)
-- [ESLint Documentation](https://eslint.org/)
-- [Prettier Documentation](https://prettier.io/)
