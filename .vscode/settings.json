@@ -5,9 +5,11 @@
     "Contentful",
     "lgorniak",
     "libpeerconnection",
+    "pkill",
     "scannerwork",
     "sonarcloud",
     "testem",
-    "trufflesecurity"
+    "trufflesecurity",
+    "zaproxy"
   ]
 }
