@@ -13,7 +13,7 @@
     "lint": "eslint \"src/**/*.{ts,html}\"",
     "lint:fix": "eslint \"src/**/*.{ts,html}\" --fix",
     "format": "prettier --write \"src/**/*.{ts,html,css,scss}\"",
-    "prepare": "husky install",
+    "prepare": "husky",
     "lighthouse": "lighthouse http://localhost:4200 --view --output-path=./lighthouse-report.html --preset=desktop"
   },
   "private": true,
@@ -27,13 +27,13 @@
     ]
   },
   "dependencies": {
-    "@angular/common": "^20.0.0",
-    "@angular/compiler": "^20.0.0",
-    "@angular/core": "^20.0.0",
-    "@angular/forms": "^20.0.0",
-    "@angular/platform-browser": "^20.0.0",
-    "@angular/platform-browser-dynamic": "^20.0.0",
-    "@angular/router": "^20.0.0",
+    "@angular/common": "^20.0.5",
+    "@angular/compiler": "^20.0.5",
+    "@angular/core": "^20.0.5",
+    "@angular/forms": "^20.0.5",
+    "@angular/platform-browser": "^20.0.5",
+    "@angular/platform-browser-dynamic": "^20.0.5",
+    "@angular/router": "^20.0.5",
     "rxjs": "~7.8.0",
     "tslib": "^2.3.0",
     "zone.js": "~0.15.1"
@@ -47,7 +47,7 @@
     "@angular-eslint/schematics": "^20.0.0",
     "@angular-eslint/template-parser": "^20.0.0",
     "@angular/cli": "^20.0.0",
-    "@angular/compiler-cli": "^20.0.0",
+    "@angular/compiler-cli": "^20.0.5",
     "@eslint/js": "^9.29.0",
     "@types/jest": "^29.5.14",
     "@typescript-eslint/eslint-plugin": "^8.35.0",
