@@ -1,0 +1,195 @@
+---
+description: 
+globs: 
+alwaysApply: false
+---
+A rule for Cursor AI has been created based on the implementation guide. This rule can be referenced when coding to ensure a proper and efficient integration of Apache ECharts in Angular projects.
+
+Cursor AI Rule: Integrating Apache ECharts with Angular
+Rule Description: This rule outlines the best practices for integrating the Apache ECharts charting library into an Angular application. It provides a step-by-step guide for installation, configuration, and usage, focusing on the recommended ngx-echarts wrapper library.
+
+When to Apply This Rule: Apply this rule whenever a user wants to add charts or graphs to an Angular project using ECharts.
+
+Core Principle: The recommended and most efficient method for integrating ECharts into an Angular application is by using the ngx-echarts wrapper library. This library handles the chart lifecycle and provides a declarative, "Angular-friendly" way to manage charts. Direct integration is possible but not recommended due to the increased complexity and boilerplate code.
+
+Implementation Steps
+1. Installation
+
+Install both echarts and ngx-echarts using npm:
+
+Bash
+
+npm install echarts --save
+npm install ngx-echarts --save
+2. Configuration (Standalone Components - Recommended)
+
+For applications using standalone components, configure ngx-echarts in your app.config.ts or the providers array of a specific component.
+
+Import provideEcharts:
+
+TypeScript
+
+// app.config.ts
+import { ApplicationConfig } from '@angular/core';
+import { provideEcharts } from 'ngx-echarts';
+
+export const appConfig: ApplicationConfig = {
+  providers: [
+    provideEcharts(),
+  ]
+};
+3. Configuration (NgModule - Legacy)
+
+For traditional NgModule-based applications, import NgxEchartsModule into your app.module.ts or a feature module.
+
+Import NgxEchartsModule and configure granular imports:
+
+TypeScript
+
+// app.module.ts
+import { NgModule } from '@angular/core';
+import { BrowserModule } from '@angular/platform-browser';
+import { NgxEchartsModule } from 'ngx-echarts';
+import * as echarts from 'echarts';
+
+@NgModule({
+  declarations: [
+    // ...
+  ],
+  imports: [
+    BrowserModule,
+    NgxEchartsModule.forRoot({
+      echarts
+    })
+  ],
+  providers: [],
+  bootstrap: [AppComponent]
+})
+export class AppModule { }
+4. Template Usage
+
+In your component's template, use the echarts directive on a div element.
+
+Bind to the [options] input: This is the primary way to define your chart's configuration.
+
+Use the (chartInit) output: This event fires when the chart is initialized, providing access to the chart instance.
+
+HTML
+
+<div echarts [options]="chartOptions" (chartInit)="onChartInit($event)" class="chart-container"></div>
+5. Component Logic
+
+In your component's TypeScript file, define the chart options and any event handlers.
+
+Import EChartsOption for type safety:
+
+TypeScript
+
+// your.component.ts
+import { Component } from '@angular/core';
+import { EChartsOption } from 'echarts';
+
+@Component({
+  selector: 'app-my-chart',
+  templateUrl: './my-chart.component.html',
+})
+export class MyChartComponent {
+  chartOptions: EChartsOption = {
+    xAxis: {
+      type: 'category',
+      data: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun']
+    },
+    yAxis: {
+      type: 'value'
+    },
+    series: [{
+      data: [120, 200, 150, 80, 70, 110, 130],
+      type: 'bar'
+    }]
+  };
+
+  onChartInit(ec) {
+    // You can now access the echarts instance
+    console.log('Chart initialized:', ec);
+  }
+}
+Best Practices and Optimizations
+1. Tree-Shaking (Bundle Size Reduction)
+
+To significantly reduce the final bundle size, only import the ECharts components you need. When using standalone components, this is handled in the component file. For NgModules, this is done in the module file.
+
+Example of granular imports:
+
+TypeScript
+
+import { EChartsOption } from 'echarts';
+import { use } from 'echarts/core';
+import { CanvasRenderer } from 'echarts/renderers';
+import { BarChart } from 'echarts/charts';
+import {
+  GridComponent,
+  TooltipComponent
+} from 'echarts/components';
+
+// Register the components
+use([
+  CanvasRenderer,
+  BarChart,
+  GridComponent,
+  TooltipComponent
+]);
+2. Type Safety
+
+Always use the EChartsOption type from the echarts library when defining your chart options. This provides autocompletion and compile-time checking.
+
+3. Asynchronous Data Loading
+
+When fetching chart data from an API, use a loading flag and the [loading] input of the echarts directive.
+
+Template:
+
+HTML
+
+<div echarts [options]="chartOptions" [loading]="isLoading"></div>
+Component:
+
+TypeScript
+
+isLoading = true;
+
+ngOnInit() {
+  this.dataService.getChartData().subscribe(data => {
+    this.chartOptions = {
+      // ... options based on data
+    };
+    this.isLoading = false;
+  });
+}
+4. Updating Charts
+
+To update a chart with new data or options without a full re-render, use the [merge] input. This is more performant than reassigning the entire [options] object.
+
+Template:
+
+HTML
+
+<div echarts [options]="chartOptions" [merge]="updateOptions"></div>
+Component:
+
+TypeScript
+
+updateData() {
+  // Fetch new data
+  const newData = [/* ... */];
+  this.updateOptions = {
+    series: [{
+      data: newData
+    }]
+  };
+}
+Troubleshooting Common Issues
+"Expression has changed after it was checked" error: This often happens when chart options are modified in a lifecycle hook that runs after the view is checked (e.g., ngAfterViewInit). Ensure that option modifications are done in ngOnInit or in response to user events.
+
+Chart not rendering in hidden containers: If the chart is in a container that is initially hidden (e.g., with *ngIf or in an inactive tab), ECharts may not be able to calculate its dimensions. If this occurs, you may need to manually call the resize() method on the chart instance when the container becomes visible.
+
+Type errors with EChartsOption: If you see type errors, ensure you have imported and registered all the necessary components for the features you are using in your chart options (e.g., TooltipComponent for tooltips, GridComponent for axes).
