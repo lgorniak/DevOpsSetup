@@ -1,0 +1,71 @@
+---
+description: 
+globs: 
+alwaysApply: false
+---
+Core Principles
+Standalone is the Default: All generated components, directives, and pipes should be standalone. NgModule should only be used for specific backward compatibility scenarios or when explicitly requested.
+
+Embrace Reactivity with Signals: Leverage Angular Signals for state management and data flow within components. Signals offer a more granular and efficient way to handle change detection.
+
+Utilize Modern Template Syntax: The built-in control flow (@if, @for, @switch) should be the default for all new templates. The older *ngIf, *ngFor, and *ngSwitch directives are considered legacy.
+
+Promote Modern Dependency Injection: The inject() function should be the preferred way to inject dependencies, especially in functional components and services.
+
+Leverage the Modern CLI: The generated code and project structure should be compatible with the latest Angular CLI, which uses Vite and esbuild for a faster development experience.
+
+Prioritize Performance: Generated code should follow best practices for performance, including using OnPush change detection, lazy loading with deferrable views, and efficient event handling.
+
+Specific Rules for Code Generation and Refactoring
+Components and Directives
+Always Generate Standalone Components: When creating a new component, it should be generated with the standalone: true flag and should import its dependencies directly.
+
+Use OnPush Change Detection: All generated components should use changeDetection: ChangeDetectionStrategy.OnPush to optimize performance.
+
+Prefer inject() for Dependencies: Use the inject() function in the component's constructor or as a class member to inject dependencies. This is more flexible than traditional constructor injection.
+
+Leverage viewChild and contentChild with Signals: When querying for child components or elements, use the signal-based viewChild and contentChild for a more reactive approach.
+
+Use Modern Lifecycle Hooks: When necessary, use the modern lifecycle hooks such as afterNextRender and afterRender for interacting with the DOM.
+
+Templates
+Default to Built-in Control Flow: Always use @if, @for, and @switch for conditional and repeated content in templates.
+
+Utilize Deferrable Views (@defer): For non-critical or below-the-fold content, use @defer to lazy load components and improve initial page load times.
+
+Use Signal-based Inputs: When defining component inputs, use the input() function to create signal-based inputs that are more efficient and reactive.
+
+Implement Two-Way Binding with model(): For two-way data binding, use the model() function to create a signal-based model.
+
+Use Modern Event Handling: Bind to events directly in the template and call component methods. Avoid complex logic in the template itself.
+
+Services and State Management
+Generate providedIn: 'root' Services: Services should be provided at the root level by default to ensure they are singletons and can be easily injected throughout the application.
+
+Use Signals for State Management: For local and global state management, leverage Angular Signals. Create signal-based stores to manage application state in a reactive and efficient way.
+
+Combine Signals and RxJS Where Appropriate: While Signals are preferred for most state management, RxJS is still a powerful tool for handling complex asynchronous operations and event streams. Use them together where it makes sense.
+
+Leverage the resource API for Asynchronous Data: For handling asynchronous data, such as fetching data from an API, use the experimental resource API, which integrates well with Signals.
+
+Application Architecture
+Follow the Official Style Guide: Adhere to the official Angular style guide for file structure, naming conventions, and other best practices. This includes organizing the application into core, features, and shared directories.
+
+Promote a Clear Separation of Concerns: Generated code should maintain a clear separation between presentation components (dumb components) and container components (smart components).
+
+Encourage a Modular, Standalone Architecture: The generated application structure should be based on standalone components, with clear entry points for lazy loading and a logical organization of features.
+
+Identifying and Refactoring Outdated Patterns
+The AI assistant should be able to identify and suggest refactorings for the following deprecated or outdated patterns:
+
+NgModule-based Components and Modules: Suggest refactoring to standalone components and removing unnecessary NgModules.
+
+Old Structural Directives: Flag the use of *ngIf, *ngFor, and *ngSwitch and suggest migrating to the built-in control flow.
+
+Traditional Constructor Injection: Suggest refactoring to the inject() function where appropriate.
+
+Legacy Lifecycle Hooks: Replace deprecated lifecycle hooks with their modern equivalents.
+
+Use of platform-browser-dynamic: In modern applications, this is often not needed, and the AI should suggest removing it where possible.
+
+HammerJS for Gesture Support: HammerJS is deprecated. The AI should suggest using modern browser APIs or other libraries for gesture support.
