@@ -10,6 +10,7 @@ This repository contains an Angular 19 application configured with a comprehensi
 - [🛡️ Security Pipeline](#️-security-pipeline)
 - [⚡ Performance Monitoring](#-performance-monitoring)
 - [🔄 CI/CD Workflow](#-cicd-workflow)
+- [🎯 AI-Assisted Development (Cursor Rules)](#-ai-assisted-development-cursor-rules)
 - [🌿 Branching & Contributions](#-branching--contributions)
 
 ## 🚀 Getting Started
@@ -129,6 +130,54 @@ The project uses GitHub Actions for its Continuous Integration pipeline.
 4. Run Linting & Formatting checks
 5. Execute Unit Tests & collect coverage
 6. Run Production Build
+
+## 🎯 AI-Assisted Development (Cursor Rules)
+
+This project includes comprehensive AI coding rules that guide Cursor AI to generate high-quality, maintainable code following Angular and clean code best practices.
+
+### Available Rule Sets
+
+The `.cursor/rules/` directory contains specialized rule configurations that enhance AI-assisted development:
+
+#### 🅰️ Angular Rules (`angular.mdc`)
+
+- **Modern Angular 20+ Patterns**: Enforces standalone components, signals-based reactivity, and modern template syntax
+- **Performance Best Practices**: OnPush change detection, lazy loading with deferrable views, and efficient event handling
+- **Latest API Usage**: Promotes `inject()` function, signal-based inputs/outputs with `input()` and `model()`, and built-in control flow (`@if`, `@for`, `@switch`)
+- **Architecture Guidelines**: Encourages clear separation of concerns and modular, standalone architecture
+
+#### 📊 ECharts Integration (`eCharts.mdc`)
+
+- **Optimal Integration**: Comprehensive guide for integrating Apache ECharts using the recommended `ngx-echarts` wrapper
+- **Performance Optimization**: Tree-shaking configuration to reduce bundle size
+- **Type Safety**: Enforces proper TypeScript types and interfaces
+- **Best Practices**: Covers asynchronous data loading, chart updates, and common troubleshooting scenarios
+
+#### 🧹 Clean Code Standards (`clean-code.mdc`)
+
+- **Clean Code Developer Grades**: Implements principles from Red through White grades
+- **SOLID Principles**: Enforces Single Responsibility, Open/Closed, Liskov Substitution, Interface Segregation, and Dependency Inversion
+- **Code Quality**: Emphasizes DRY, KISS, YAGNI principles with focus on readability and maintainability
+- **Testing & Architecture**: Promotes test-driven development and component-based design
+
+### How Cursor Rules Enhance Development
+
+These rules automatically guide the AI to:
+
+✅ **Generate Modern Code**: Always produces Angular 20+ compatible code with latest patterns  
+✅ **Maintain Consistency**: Ensures all generated code follows the same high standards  
+✅ **Optimize Performance**: Applies performance best practices by default  
+✅ **Enforce Standards**: Automatically applies clean code principles and SOLID design patterns  
+✅ **Reduce Technical Debt**: Prevents common anti-patterns and code smells
+
+### Using the Rules
+
+The rules are automatically applied when using Cursor AI within this project. They work seamlessly with the existing DevOps pipeline, ensuring that AI-generated code:
+
+- Passes all linting and formatting checks
+- Follows the established testing patterns
+- Integrates properly with the CI/CD workflow
+- Maintains the project's architectural standards
 
 ## 🌿 Branching & Contributions
 
