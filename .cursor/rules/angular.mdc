@@ -1,7 +1,7 @@
 ---
 description: 
 globs: 
-alwaysApply: false
+alwaysApply: true
 ---
 Core Principles
 Standalone is the Default: All generated components, directives, and pipes should be standalone. NgModule should only be used for specific backward compatibility scenarios or when explicitly requested.
@@ -69,3 +69,158 @@ Legacy Lifecycle Hooks: Replace deprecated lifecycle hooks with their modern equ
 Use of platform-browser-dynamic: In modern applications, this is often not needed, and the AI should suggest removing it where possible.
 
 HammerJS for Gesture Support: HammerJS is deprecated. The AI should suggest using modern browser APIs or other libraries for gesture support.
+
+Here are the updated rules for an AI assistant like Cursor, now including the latest naming and file structure conventions for modern Angular applications.
+
+Rules for AI-Assisted Modern Angular Development (Updated with Naming Conventions)
+Core Principles
+Standalone is the Default: All generated components, directives, and pipes should be standalone. NgModule should only be used for specific backward compatibility scenarios or when explicitly requested.
+
+Embrace Reactivity with Signals: Leverage Angular Signals for state management and data flow within components. Signals offer a more granular and efficient way to handle change detection.
+
+Utilize Modern Template Syntax: The built-in control flow (@if, @for, @switch) should be the default for all new templates. The older *ngIf, *ngFor, and *ngSwitch directives are considered legacy.
+
+Promote Modern Dependency Injection: The inject() function should be the preferred way to inject dependencies, especially in functional components and services.
+
+Leverage the Modern CLI: The generated code and project structure should be compatible with the latest Angular CLI, which uses Vite and esbuild for a faster development experience.
+
+Prioritize Performance: Generated code should follow best practices for performance, including using OnPush change detection, lazy loading with deferrable views, and efficient event handling.
+
+New: Naming & File Structure Conventions
+The AI assistant should adopt the following modern naming conventions, which aim to reduce boilerplate and improve clarity.
+
+File Naming
+General Rule: Use kebab-case for all filenames.
+
+Components, Directives, and Services: Omit the type suffix. The file name should describe the feature.
+
+user-profile.ts (Previously user-profile.component.ts)
+
+highlight.ts (Previously highlight.directive.ts)
+
+Services/Stores: Use domain-specific or role-based names instead of the generic service suffix.
+
+auth-store.ts
+
+products-api.ts
+
+user-data.ts
+
+Other Constructs: Retain a hyphenated suffix for other file types.
+
+auth-guard.ts
+
+currency-format-pipe.ts
+
+app.routes.ts
+
+user-profile.spec.ts
+
+Class & Symbol Naming
+General Rule: Use PascalCase for all class names.
+
+Components, Directives, and Services: Omit the type suffix from the class name, mirroring the file name convention.
+
+export class UserProfile { ... }
+
+export class Highlight { ... }
+
+export class AuthStore { ... }
+
+Other Constructs: Retain the suffix on the class name.
+
+export class AuthGuard { ... }
+
+export class CurrencyFormatPipe { ... }
+
+Selectors: Component selectors should remain prefixed (e.g., app- or a shared feature prefix) and use kebab-case.
+
+selector: 'app-user-profile'
+
+Signal Naming
+Private/Internal Signals: Prefix with an underscore (_) to indicate they are for internal component use.
+
+private readonly _users = signal<User[]>([]);
+
+Public/Exposed Signals: Expose signals without the underscore, often as computed or asReadonly() signals.
+
+readonly users = this._users.asReadonly();
+
+Boolean Signals: Use prefixes like is, has, or can.
+
+readonly isLoading = signal(false);
+
+readonly hasError = signal(false);
+
+Collection Signals: Use plural names.
+
+readonly products = signal<Product[]>([]);
+
+Computed Signals: Name them descriptively based on what they derive.
+
+readonly filteredProducts = computed(() => ...);
+
+readonly cartIsEmpty = computed(() => this.products().length === 0);
+
+Application Folder Structure
+High-Level Structure: Organize the app/ folder by domain or high-level features, not just by technical type.
+
+src/
+└── app/
+    ├── domains/
+    │   └── products/
+    │   └── auth/
+    ├── shared/
+    └── core/
+Feature/Domain Folder: Within a feature folder, group files by feature, with routed components often in a pages/ sub-directory.
+
+products/
+├── pages/
+│   ├── product-list/
+│   │   ├── product-list.ts
+│   │   └── product-list.html
+│   └── product-detail/
+│       ├── product-detail.ts
+│       └── product-detail.html
+├── components/
+│   └── product-card/
+│       ├── product-card.ts
+│       └── product-card.html
+├── stores/
+│   └── products-data.ts
+└── products.routes.ts
+Shared Folder: The shared/ directory should contain dumb, reusable components, pipes, and utilities that have no business logic.
+
+Specific Rules for Code Generation and Refactoring
+(This section remains the same as before but should now follow the new naming conventions in any generated code.)
+
+Components and Directives
+Always Generate Standalone Components.
+
+Use OnPush Change Detection.
+
+Prefer inject() for Dependencies.
+
+Leverage viewChild and contentChild with Signals.
+
+Use Modern Lifecycle Hooks (afterNextRender, afterRender).
+
+Templates
+Default to Built-in Control Flow (@if, @for, @switch).
+
+Utilize Deferrable Views (@defer).
+
+Use Signal-based Inputs (input()).
+
+Implement Two-Way Binding with model().
+
+Use Modern Event Handling.
+
+Services and State Management
+Generate providedIn: 'root' Services.
+
+Use Signals for State Management.
+
+Combine Signals and RxJS Where Appropriate.
+
+Leverage the resource API for Asynchronous Data.

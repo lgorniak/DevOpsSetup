@@ -1,0 +1,76 @@
+.page-container {
+  min-height: 100vh;
+  background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+  padding: 2rem;
+}
+
+.page-header {
+  max-width: 1200px;
+  margin: 0 auto 2rem auto;
+  text-align: center;
+}
+
+.navigation {
+  margin-bottom: 2rem;
+  text-align: left;
+}
+
+.nav-link {
+  display: inline-block;
+  padding: 0.75rem 1.5rem;
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  color: white;
+  text-decoration: none;
+  border-radius: 25px;
+  font-weight: 500;
+  transition: all 0.3s ease;
+  box-shadow: 0 4px 15px rgba(102, 126, 234, 0.3);
+}
+
+.nav-link:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 20px rgba(102, 126, 234, 0.4);
+  text-decoration: none;
+  color: white;
+}
+
+.back-link {
+  background: linear-gradient(135deg, #74b9ff 0%, #0984e3 100%);
+  box-shadow: 0 4px 15px rgba(116, 185, 255, 0.3);
+}
+
+.back-link:hover {
+  box-shadow: 0 6px 20px rgba(116, 185, 255, 0.4);
+}
+
+.page-header h1 {
+  font-size: 3rem;
+  color: #2d3748;
+  margin-bottom: 0.5rem;
+  font-weight: 700;
+}
+
+.page-header p {
+  font-size: 1.25rem;
+  color: #718096;
+  margin-bottom: 0;
+}
+
+.page-content {
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+@media screen and (max-width: 768px) {
+  .page-container {
+    padding: 1rem;
+  }
+
+  .page-header h1 {
+    font-size: 2rem;
+  }
+
+  .page-header p {
+    font-size: 1rem;
+  }
+}
