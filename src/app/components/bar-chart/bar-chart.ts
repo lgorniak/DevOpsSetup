@@ -1,6 +1,6 @@
 import { Component, ChangeDetectionStrategy } from '@angular/core';
 import { NgxEchartsDirective } from 'ngx-echarts';
-import { EChartsOption } from 'echarts';
+import { EChartsOption, EChartsType } from 'echarts';
 
 @Component({
   selector: 'app-bar-chart',
@@ -47,7 +47,7 @@ export class BarChart {
     ],
   };
 
-  onChartInit(ec: any) {
-    console.log('Chart initialized:', ec);
+  onChartInit(chartInstance: EChartsType): void {
+    console.log('Chart initialized:', chartInstance);
   }
 }
