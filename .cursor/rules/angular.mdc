@@ -16,6 +16,8 @@ Leverage the Modern CLI: The generated code and project structure should be comp
 
 Prioritize Performance: Generated code should follow best practices for performance, including using OnPush change detection, lazy loading with deferrable views, and efficient event handling.
 
+Prefer Treeshaking Imports: Always prefer specific imports over full library imports to reduce bundle size. Import only the components, functions, or modules you actually use rather than importing entire libraries. For example, prefer `import { BarChart } from 'echarts/charts'` over `import * as echarts from 'echarts'`.
+
 Specific Rules for Code Generation and Refactoring
 Components and Directives
 Always Generate Standalone Components: When creating a new component, it should be generated with the standalone: true flag and should import its dependencies directly.
