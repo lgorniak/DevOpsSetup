@@ -6,6 +6,7 @@ export default {
   collectCoverage: true,
   coverageDirectory: 'coverage',
   coverageReporters: ['lcov', 'text-summary', 'html'],
+  coveragePathIgnorePatterns: ['/node_modules/', 'src/app/app.routes.ts'],
   moduleNameMapper: {
     '^src/(.*)$': '<rootDir>/src/$1',
     '^app/(.*)$': '<rootDir>/src/app/$1',

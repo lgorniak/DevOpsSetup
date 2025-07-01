@@ -60,6 +60,8 @@ export default [
       'no-unsafe-finally': 'off',
       'no-case-declarations': 'off',
       'no-empty': 'off',
+      // Angular specific rules
+      '@angular-eslint/prefer-on-push-component-change-detection': 'error',
     },
   },
   {

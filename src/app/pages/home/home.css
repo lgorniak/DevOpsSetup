@@ -69,7 +69,7 @@ p {
   color: var(--gray-700);
 }
 
-main {
+.main {
   width: 100%;
   min-height: 100%;
   display: flex;
@@ -127,10 +127,9 @@ main {
   transition: background 0.3s ease;
   font-family: var(--inter-font);
   font-size: 0.875rem;
-  font-style: normal;
-  font-weight: 500;
-  line-height: 1.4rem;
-  letter-spacing: -0.00875rem;
+  line-height: 1.4;
+  overflow: hidden;
+  cursor: pointer;
   text-decoration: none;
 }
 
